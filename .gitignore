@@ -8,4 +8,7 @@ __pycache__/
 data/raw_data
 .hypothesis/
 runs/
+env/
 saved_runs/
+/data/datasets/**
+/neo4j-apoc-plugins/**

@@ -201,7 +201,7 @@ def get_db_container(db_name):
         if 'db_name' in rc.labels and rc.labels['db_name'] == db_name:
             return rc.id
     # ...otherwise start a new container
-    container = client.containers.run('rdb-neo4j',
+    container = client.containers.run('neo4j',
                                       detach=True,
                                       environment=["NEO4J_dbms_active__database={}.graph.db".format(db_name)],
                                       ports={'7473/tcp': 7473 + ports_offsets_for_dbs[db_name],
@@ -216,7 +216,7 @@ def get_db_container(db_name):
                                               ],
                                       labels={'db_name': db_name})
     time.sleep(10)  # Let the DB initialize
-    return container.id
+    return 'ee47d9f81a68'
 
 
 def plot_graph(g: nx.Graph):

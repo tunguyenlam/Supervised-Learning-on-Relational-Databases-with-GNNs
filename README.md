@@ -72,3 +72,16 @@ Or you can export the docker image built with `docker/whole_project/Dockerfile` 
 # License
 
 The content of the notes linked above is licensed under the [Creative Commons Attribution 3.0 license](http://creativecommons.org/licenses/by/3.0/us/deed.en_US), and the code in this repo is licensed under the [MIT license](http://opensource.org/licenses/mit-license.php).
+
+
+
+######
+
+docker run -d -e "NEO4J_dbms_active__database=kddcup2014.graph.db" --publish=7474:7474 --publish=7687:7687 --mount type=bind,source=./data/raw_data/kddcup2014,target=/data rdb-neo4j
+
+python -m data.acquirevaluedshopperschallenge.build_database_from_kaggle_files
+
+
+docker-compose exec -i neo4j bash
+cd /var/lib/neo4j/import/data
+cypher-shell < kddcup2014_neo4j_loader.cypher

@@ -1,0 +1,27 @@
+version: "3.5"
+
+networks:
+  neo4j-network:
+    driver: bridge
+    name: neo4j-network
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.239.0/24
+
+services:
+  neo4j:
+    platform: linux/x86_64
+    container_name: neo4j
+    build:
+      dockerfile: Dockerfile
+      context: .
+    networks:
+      neo4j-network:
+        ipv4_address: 172.16.239.21
+    volumes:
+      - ./data/raw_data/kddcup2014:/var/lib/neo4j/import/data/
+    ports:
+      - '7474:7474'
+      - '7473:7473'
+      - '7687:7687'
