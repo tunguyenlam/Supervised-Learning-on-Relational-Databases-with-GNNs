@@ -113,10 +113,14 @@ def start_evaluating(
         checkpoint_id,
         device,
         num_workers):
+    
+    print("Loading train_kwrgs...")
     with open(os.path.join(model_logdir, 'train_kwargs.json')) as f:
         train_kwargs = json.load(f)
     ds_name = train_kwargs['dataset_name']
     encoders = train_kwargs['encoders']
+
+    print("Loading dataset...")
     train_data, _, test_data = get_train_val_test_datasets(dataset_name=ds_name,
                                                            train_test_split=train_kwargs['train_test_split'],
                                                            encoders=encoders,
@@ -127,6 +131,8 @@ def start_evaluating(
                                  sampler_class_name='SequentialSampler',
                                  num_workers=num_workers,
                                  max_nodes_per_graph=train_kwargs['max_nodes_per_graph'])
+    
+    print("Loading model...")
     writer = DummyWriter()
     model_class = models.__dict__[train_kwargs['model_class_name']]
     if isinstance(train_data, TabularDataset):
@@ -161,6 +167,7 @@ def start_evaluating(
     results_dir = os.path.join(model_logdir, 'evaluations', f'model_checkpoint_{checkpoint_id}')
     os.makedirs(results_dir, exist_ok=True)
 
+    print("do_evaluate...")
     if do_evaluate:
         evaluate_model(test_loader, train_kwargs, results_dir, model)
 
