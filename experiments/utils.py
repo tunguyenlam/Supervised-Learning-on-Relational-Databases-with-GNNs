@@ -19,6 +19,9 @@ def run_script_with_kwargs(script_name, kwargs, session_name, locale='local_tmux
                       sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport <your_AWS_EFS_name>:/ ./RDB_code ; \
                       cd RDB_code; \
                       python -m {script_name} {enc_kwargs};'
+    
+    cmd = f"python -m {script_name} {enc_kwargs}"
+    print(cmd)
     if locale == 'local_tmux':
         subprocess.run("tmux new-session -d -s {}".format(session_name), shell=True)
         subprocess.run("tmux send-keys -t {} 'sudo {} -m {} {}' C-m ".format(session_name,
