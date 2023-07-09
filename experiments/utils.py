@@ -20,7 +20,7 @@ def run_script_with_kwargs(script_name, kwargs, session_name, locale='local_tmux
                       cd RDB_code; \
                       python -m {script_name} {enc_kwargs};'
     
-    cmd = f"python -m {script_name} {enc_kwargs}"
+    cmd = f"python3 -m {script_name} {enc_kwargs}"
     print(cmd)
     subprocess.run(cmd, shell=True)
 
