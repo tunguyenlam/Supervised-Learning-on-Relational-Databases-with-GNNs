@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as F
-from dgl import BatchedDGLGraph
+from dgl import DGLGraph
 from dgl.nn.pytorch.conv import GraphConv, RelGraphConv
 from torch import nn
 

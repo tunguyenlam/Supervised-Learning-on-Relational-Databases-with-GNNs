@@ -60,7 +60,7 @@ CALL db.awaitIndexes(600);
 
 // Create Essays
 USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS FROM 'file:///data/essays.csv' AS row
+LOAD CSV WITH HEADERS FROM 'file:///data/essays_without_quotes.csv' AS row
 CREATE (ess:Essay {title:             row.title,
                    short_description: row.short_description,
                    need_statement:    row.need_statement,
