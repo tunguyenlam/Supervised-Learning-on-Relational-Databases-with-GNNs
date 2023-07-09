@@ -22,43 +22,45 @@ def run_script_with_kwargs(script_name, kwargs, session_name, locale='local_tmux
     
     cmd = f"python -m {script_name} {enc_kwargs}"
     print(cmd)
-    if locale == 'local_tmux':
-        subprocess.run("tmux new-session -d -s {}".format(session_name), shell=True)
-        subprocess.run("tmux send-keys -t {} 'sudo {} -m {} {}' C-m ".format(session_name,
-                                                                             sys.executable,
-                                                                             script_name,
-                                                                             base64.b64encode(
-                                                                                 pickle.dumps(kwargs)).decode()),
-                       shell=True,
-                       env=os.environ.copy())
-        subprocess.run("tmux send-keys -t {} 'exit' C-m ".format(session_name), shell=True)
+    subprocess.run(cmd, shell=True)
 
-    elif locale == 'local_docker':
-        subprocess.run("tmux new-session -d -s {}".format(session_name), shell=True)
-        subprocess.run(
-            "tmux send-keys -t {} 'nvidia-docker run --privileged {} /bin/bash -c \" {} \" ' C-m ".format(session_name,
-                                                                                                          local_docker_image_id,
-                                                                                                          container_cmd),
-            shell=True,
-            env=os.environ.copy())
+    # if locale == 'local_tmux':
+    #     subprocess.run("tmux new-session -d -s {}".format(session_name), shell=True)
+    #     subprocess.run("tmux send-keys -t {} 'sudo {} -m {} {}' C-m ".format(session_name,
+    #                                                                          sys.executable,
+    #                                                                          script_name,
+    #                                                                          base64.b64encode(
+    #                                                                              pickle.dumps(kwargs)).decode()),
+    #                    shell=True,
+    #                    env=os.environ.copy())
+    #     subprocess.run("tmux send-keys -t {} 'exit' C-m ".format(session_name), shell=True)
 
-    elif locale == 'local_tmux':
-        client = boto3.client('batch')
-        command = ['/bin/bash', '-c', 'Ref::container_cmd']
-        job = dict(
-            jobName=session_name,
-            jobQueue='<your_AWS_Batch_job_queue_name>',
-            jobDefinition='<your_AWS_Batch_job_definition_name>',
-            containerOverrides=dict(
-                vcpus=n_cpu,
-                memory=mb_memory,
-                command=command,
-                resourceRequirements=[dict(value=str(n_gpu), type='GPU')] if n_gpu else []
-            ),
-            parameters=dict(container_cmd=container_cmd)
-        )
-        response = client.submit_job(**job)
-        pprint(response)
+    # elif locale == 'local_docker':
+    #     subprocess.run("tmux new-session -d -s {}".format(session_name), shell=True)
+    #     subprocess.run(
+    #         "tmux send-keys -t {} 'nvidia-docker run --privileged {} /bin/bash -c \" {} \" ' C-m ".format(session_name,
+    #                                                                                                       local_docker_image_id,
+    #                                                                                                       container_cmd),
+    #         shell=True,
+    #         env=os.environ.copy())
 
-    else:
-        raise ValueError('locale not recognized')
+    # elif locale == 'local_tmux':
+    #     client = boto3.client('batch')
+    #     command = ['/bin/bash', '-c', 'Ref::container_cmd']
+    #     job = dict(
+    #         jobName=session_name,
+    #         jobQueue='<your_AWS_Batch_job_queue_name>',
+    #         jobDefinition='<your_AWS_Batch_job_definition_name>',
+    #         containerOverrides=dict(
+    #             vcpus=n_cpu,
+    #             memory=mb_memory,
+    #             command=command,
+    #             resourceRequirements=[dict(value=str(n_gpu), type='GPU')] if n_gpu else []
+    #         ),
+    #         parameters=dict(container_cmd=container_cmd)
+    #     )
+    #     response = client.submit_job(**job)
+    #     pprint(response)
+
+    # else:
+    #     raise ValueError('locale not recognized')

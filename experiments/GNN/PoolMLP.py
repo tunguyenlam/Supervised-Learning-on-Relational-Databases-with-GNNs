@@ -6,8 +6,8 @@ from experiments.utils import run_script_with_kwargs
 model_class_name = 'PoolMLP'
 
 db_names = (
-    'acquirevaluedshopperschallenge',
-    'homecreditdefaultrisk',
+    # 'acquirevaluedshopperschallenge',
+    # 'homecreditdefaultrisk',
     'kddcup2014',
 )
 
