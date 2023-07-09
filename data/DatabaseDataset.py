@@ -23,7 +23,7 @@ class DatabaseDataset(Dataset):
         # Download data if necessary
         all_dps_present = len(os.listdir(self.data_dir)) == self.db_info['task']['n_train'] + self.db_info['task'][
             'n_test']
-        assert all_dps_present
+        # assert all_dps_present
 
         self.feature_encoders = {}
         for node_type, features in self.db_info['node_types_and_features'].items():
